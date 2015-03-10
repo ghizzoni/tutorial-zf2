@@ -1,6 +1,11 @@
 <?php
 namespace Contato;
 
+use Contato\Model\Contato;
+use Contato\Model\ContatoTable;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
+
 class Module
 {
     public function getConfig()
@@ -32,6 +37,29 @@ class Module
                 },
                 'message' => function($sm) {
                     return new View\Helper\Message($sm->getServiceLocator()->get('ControllerPluginManager')->get('flashMessenger'));
+                }
+            )
+        );
+    }
+    
+    public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
+                'ContatoTableGateway' => function ($sm) {
+                    // obter adapter db através do service manager
+                    $adapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    
+                    // configurar ResultSet com nosso model Contato
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Contato());
+                    
+                    // return TableGateway configurado para nosso model Contato
+                    return new TableGateway('contatos', $adapter, null, $resultSetPrototype);
+                },
+                'ModeContato' => function($sm) {
+                    // return instancia Model ContatoTable
+                    return new ContatoTable($sm->get('ContatoTableGateway'));
                 }
             )
         );
