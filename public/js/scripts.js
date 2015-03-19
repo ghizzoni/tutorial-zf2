@@ -7,3 +7,14 @@ $(function () {
         // gerar efeito para o elemento encontrado na página
             corpo_alert.fadeOut().fadeIn().fadeOut().fadeIn();
 });
+
+/**
+ * mark input
+ */
+$(function (){
+   //mascara para telefone (xx)xxxx-xxxxx
+   $("input#inputTelefonePrincipal, input#inputTelefoneSecundario").mask("(99)9999-99999");
+   
+   //mascara para captcha com 12 caracteres apenas alfabéticos: xxxxxxxxxxxx
+   $("input#inputCaptcha").mask("aaaaaaaaaaaa");
+});
